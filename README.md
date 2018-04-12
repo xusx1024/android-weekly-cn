@@ -1,2 +1,2 @@
 # android-weekly-cn
-汉化android weekly中顺眼的文章.
+每周汉化android 中顺眼的文章.
