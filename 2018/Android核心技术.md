@@ -91,6 +91,7 @@
 [Trade Federation Testing Infrastructure Overview](https://source.android.com/devices/tech/test_infra/tradefed/index.html)
 
 ### Vendor Test Suite (VTS)
+
 `Android`供应商测试套件(VTS)为`Android`测试提供了广泛的新功能,并促进了测试驱动的开发过程.本节描述了测试工具和可用的资源来帮助`Android`开发者和测试数据相互作用.
 
 [VTS Information](https://source.android.com/devices/tech/vts/index.html)
