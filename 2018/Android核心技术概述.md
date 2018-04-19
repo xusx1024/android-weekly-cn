@@ -1,4 +1,4 @@
-# Android核心技术
+# Android核心技术概述
 ---
 [原文链接](https://source.android.com/devices/tech/)
 
