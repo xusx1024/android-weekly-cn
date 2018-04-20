@@ -2,4 +2,50 @@
 ---
 [原文链接](https://developer.android.com/topic/performance/memory-overview.html)
 
-* []()
+* [Garbage collection](#Garbage-collection)
+* [Sharing Memory](#Sharing-Memory)
+* [Allocating and Reclaiming App Memory](#Allocating-and-Reclaiming-App-Memory)
+* [Restricting App Memory](#Restricting-App-Memory)
+* [Switching apps](#Switching-apps)
+
+`ART`和`Dalvik`虚拟机使用分页和[内存映射](https://github.com/xusx1024/android-weekly-cn/blob/master/2018/内存映射文件.md)管理内存.这意味着应用程序修改的任何内存(无论是通过分配新对象还是接触映射的页)仍然驻留在`RAM`中,并且无法被换出内存.从一个应用释放内存的唯一途径是释放应用持有的对象引用,使得内存被垃圾收集器可用.这样有一个例外:任何文件被无修改的映射,比如代码,如果系统需要在别的地方使用内存,可用被换出内存.
+
+该页面解释了`Android`管理应用进程和内存的分配.查看更多关于如何更加高效管理内存的信息:[管理你应用的内存](https://github.com/xusx1024/android-weekly-cn/blob/master/2018/管理你应用的内存.md)
+
+### Garbage collection
+
+一个托管的内存环境,比如在`ART`或者`Dalvik`虚拟机中,持续追踪每次内存分配.一旦他决定一段内存不再被程序使用,他就释放其回到堆中,不需要程序员干涉.这个在托管的内存环境中关于重新申请不再使用的内存的机制就是著名的垃圾收集器.垃圾收集器有两个目标:找到程序中不再被访问的数据对象;重新分布被这些对象占用的资源.
+
+`Android`的堆内存是分代的,也就是说根据分配的对象期望的生命时间和对象的大小,垃圾收集器追踪不同的桶.比如说,最近分配的对象在新生代,当对象在内存中待得时间足够长,就被提升到老年代,然后是永久代.
+
+每一个年代的堆,都有其对象分配内存的专有的上限.任何时间一个年代将要填充满,系统就打算通过执行垃圾收集事件来释放内存.垃圾收集持续的时间取决于要收集的对象所处的年代以及每个年代有多少活动的对象.
+
+尽管垃圾收集器可以非常快,但仍然可以影响你应用的性能.你通常不需要控制发生在你代码中的垃圾收集事件.系统有自己的标准(可达性分析?)来决定何时执行垃圾收集.当标准合适了,系统将停止进程并且开始垃圾回收.如果垃圾回收发生在敏感进程循环之中,比如动画或者音乐后台播放,这将增加执行时间.这种增长,会潜在增加代码执行时间,导致超过了推荐的流畅渲染框架的16毫秒阈值.
+
+另外,你的代码流可能执行各样的工作,迫使垃圾收集器事件更多的执行或者使执行时间长于平时.比如说,如果你再一个渐变渲染动画的每一帧的循环中分配了多个对象,这么多对象也许会污染你的堆内存.在这种环境下,垃圾收集器执行多次垃圾收集事件并且降低了你的应用的性能.
+
+更多关于垃圾收集器的信息,看wiki:[Garbage collection](https://en.wikipedia.org/wiki/Garbage_collection_(computer_science)
+
+此处建议阅读`深入理解Java虚拟机:JVM高级特性与最佳实践`的`第三章:垃圾收集器与内存分配策略`了解垃圾收集器的标准以及常见的垃圾回收算法策略.
+
+如果对虚拟机的内存分类不太了解,可以阅读`第二章:java内存区域与内存溢出异常`,了解`JVM`的一个进程的运行时数据区的各部分组成,并且熟悉各个部分的作用.
+
+### Sharing Memory
+
+`共享内存`
+
+`Android`为了适应他在`RAM`中所需要的一切,尝试在进程间共享`RAM`页.有下面几种实现方式:
+
+* 每个应用进程是从一个已经存在的叫做`Zygote`的进程中复刻的.`Zygote`进程当系统启动时开启,并且加载通用框架代码和资源(比如`Activity`主题).要开启一个新的应用进程,系统复刻`Zygote`进程,然后在新的进程中加载应用的代码.这种方式允许大多数`RAM`页面为框架代码和资源进行跨进程共享分配.
+
+* 大多数静态数据是内存映射进入进程的.这项技术允许数据在进程间共享,并且也允许在需要时换出.静态数据的例子包括:`Dalvik`代码(通过将其放置在一个预链接的`odex`文件中进行直接映射),应用资源(通过设计资源表成为可以被映射的结构并对齐`APK`的`zip`条目.),还有传统项目元素比如在`.so`文件中的本地代码.
+
+* 在很多方面,`Android`使用显式分配共享内存区域在进程间共享相同的动态`RAM`(通过`ashmen`或者`gralloc`(Graphics Alloc(图形分配))).比如,窗口`surface`使用应用程序和平门合成器之间的共享内存,还有内容提供者和访问者之间的共享内存.
+
+由于大量使用共享内存,需要确定应用使用多少内存.确定应用内存使用量的相关内容请看:[ Investigating Your RAM Usage](https://developer.android.com/studio/profile/investigate-ram.html)
+
+
+
+### Allocating and Reclaiming App Memory
+### Restricting App Memory
+### Switching apps
