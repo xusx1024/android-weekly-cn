@@ -42,7 +42,7 @@
 
 * 在很多方面,`Android`使用显式分配共享内存区域在进程间共享相同的动态`RAM`(通过`ashmen`或者`gralloc`(Graphics Alloc(图形分配))).比如,窗口`surface`使用应用程序和平门合成器之间的共享内存,还有内容提供者和访问者之间的共享内存.
 
-由于大量使用共享内存,需要确定应用使用多少内存.确定应用内存使用量的相关内容请看:[ Investigating Your RAM Usage](https://developer.android.com/studio/profile/investigate-ram.html)
+由于大量使用共享内存,需要确定应用使用多少内存.确定应用内存使用量的相关内容请看:[调查RAM使用情况](https://github.com/xusx1024/android-weekly-cn/blob/master/2018/调查RAM使用情况.md)
 
 
 
