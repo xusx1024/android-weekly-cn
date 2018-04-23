@@ -74,4 +74,4 @@
 
 > 注意:当系统开始杀死`LRU`缓存中的进程,他主要是自上而下的工作.系统会估量哪个进程消耗更多内存,并且如果死亡会为系统提供更多的内存增益.你留在`LRU`中消耗的内存越少,对你的应用保留在`LRU`列表中越有利,并且可以更快地启动.
 
-查看更多关于进程缓存的信息,以及`Android`设备里应用如何被杀死,看[Processes and Threads](https://developer.android.com/guide/components/processes-and-threads.html)的引导.
+查看更多关于进程缓存的信息,以及`Android`设备里应用如何被杀死,看[进程和线程](https://github.com/xusx1024/android-weekly-cn/blob/master/2018/进程和线程.md)的引导.
