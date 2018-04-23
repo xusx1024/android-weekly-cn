@@ -270,14 +270,14 @@ adb shell dumpsys meminfo <package_name|pid> [-d]
 
 私有(干净和脏)`RAM`
 
-    这是仅由您的进程使用的内存.这是您的应用进程被破坏时系统可以回收的`RAM`量.通常情况下,最重要的部分是私有脏`RAM`,他的开销最大,
-    因为只有您的进程使用他,而且其内容仅存在于`RAM`中,所以无法被分页以进行存储(因为`Android`不适用交换).所有的`Dalvik`和您进行的原
-    生堆分配都将是私有脏`RAM`;您与`Zygote`进程共享的`Dalvik`和原生分配是共享的脏`RAM`.
+    这是仅由您的进程使用的内存.这是您的应用进程被破坏时系统可以回收的`RAM`量.通常情况下,最重要的部分是私有脏`RAM`,他的
+    开销最大,    因为只有您的进程使用他,而且其内容仅存在于`RAM`中,所以无法被分页以进行存储(因为`Android`不适用交换).
+    所有的`Dalvik`和您进行的原生堆分配都将是私有脏`RAM`;您与`Zygote`进程共享的`Dalvik`和原生分配是共享的脏`RAM`.
 
 按比例分配占用内存(PSS)
 
-    这表示您的应用的`RAM`使用情况,考虑了在各进程之间共享`RAM`页的情况.您的进程独有的任何`RAM`页会直接影响其`PSS`值,而与其他进程共
-    享的`RAM`页仅影响与共享成比例的`PSS`值.例如,两个进程间共享的`RAM`页会将其一半的大小贡献给每个进程的`PSS`
+    这表示您的应用的`RAM`使用情况,考虑了在各进程之间共享`RAM`页的情况.您的进程独有的任何`RAM`页会直接影响其`PSS`值,而
+    与其他进程共享的`RAM`页仅影响与共享成比例的`PSS`值.例如,两个进程间共享的`RAM`页会将其一半的大小贡献给每个进程的`PSS`
 
 `PSS`结果一个比较好的特性是,您可以将所有进程的`PSS`相加来确定所有进程正在使用的实际内存.这意味着`PSS`适合测定进程的实际`RAM`比重和比较其他进程的`RAM`使用情况与可用总`RAM`.
 
@@ -367,20 +367,20 @@ adb shell dumpsys meminfo com.google.android.apps.maps -d
 
 `Dalvik Heap`
 
-    您的应用中`Dalvik`分配占用的`RAM`.`Pss Total`包括所有`Zygote`分配(如上述`PSS`定义所述,通过进程之间的共享内存来衡量).`Private Dirty`
-    数值是仅分配到您应用的堆的实际`RAM`,由您自己的分配和任何`Zygote`分配页组成,这些分配页自从`Zygote`派生应用进程以来已被修改.
+    您的应用中`Dalvik`分配占用的`RAM`.`Pss Total`包括所有`Zygote`分配(如上述`PSS`定义所述,通过进程之间的共享内存来衡量).
+    `Private Dirty`数值是仅分配到您应用的堆的实际`RAM`,由您自己的分配和任何`Zygote`分配页组成,这些分配页自从`Zygote`
+    派生应用进程以来已被修改.
 
-    >在包含`Dalvik Other`部分的更新的平台版本上,`Dalvik`堆的`Pss Total`和`Private Dirty`数值不包括`Dalvik`开销(例如即时(`JIT`)编译和
-    垃圾回收记录),而较旧的版本会在`Dalvik`中将其一并列出.
+>在包含`Dalvik Other`部分的更新的平台版本上,`Dalvik`堆的`Pss Total`和`Private Dirty`数值不包括`Dalvik`开销(例如即时(`JIT`)编译和垃圾回收记录),而较旧的版本会在`Dalvik`中将其一并列出.
 
-    `Heap Alloc`是`Dalvik`和原生堆分配器为您的应用跟踪的内存量.此值大于`Pss Total`和`Private Dirty`,因为您的进程从`Zygote`派生,且包含您
-    的进程与所有其他进程共享的分配.
+    `Heap Alloc`是`Dalvik`和原生堆分配器为您的应用跟踪的内存量.此值大于`Pss Total`和`Private Dirty`,因为您的进程从
+    `Zygote`派生,且包含您的进程与所有其他进程共享的分配.
 
 `.so mmap`和`.dex mmap`
 
-    映射的`.so`(原生)和`.dex`(`Dalvik`或`ART`)代码占用的`RAM`.`Pss Total`数值包括应用之间共享的平台代码;`Private Clean`是您的应用自己的
-    代码.通常情况下,实际映射的内存更大-此处的`RAM`仅为应用执行的代码当前所需的`RAM`.不过`.so mmap`具有较大的私有脏`RAM`,因为在
-    加载到其最终地址时对原生代码进行了修改.
+    映射的`.so`(原生)和`.dex`(`Dalvik`或`ART`)代码占用的`RAM`.`Pss Total`数值包括应用之间共享的平台代码;
+    `Private Clean`是您的应用自己的代码.通常情况下,实际映射的内存更大-此处的`RAM`仅为应用执行的代码当前所需的`RAM`.
+    不过`.so mmap`具有较大的私有脏`RAM`,因为在加载到其最终地址时对原生代码进行了修改.
 
 `.oat mmap`
 
@@ -388,7 +388,8 @@ adb shell dumpsys meminfo com.google.android.apps.maps -d
 
 `.art mmap`
 
-    这是堆映像占用的`RAM`量,根据多个应用通常使用的预加载类计算.此映像在所有应用之间共享,不受特定应用影响.尽管`ART`映像包含`Object`实例,他仍然不会计入您的堆大小.
+    这是堆映像占用的`RAM`量,根据多个应用通常使用的预加载类计算.此映像在所有应用之间共享,不受特定应用影响.
+    尽管`ART`映像包含`Object`实例,他仍然不会计入您的堆大小.
 
 `.Heap`(仅带有`-d`标志)
 
