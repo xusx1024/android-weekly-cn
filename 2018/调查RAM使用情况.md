@@ -3,6 +3,8 @@
 
 [原文链接](https://developer.android.com/studio/profile/investigate-ram.html)
 
+> 关于使用`Android-Monitor`的使用,在最新版本已经变为使用`Android-profile`
+
 * [解读日志消息](#解读日志消息)
   * [Dalvik日志消息](#Dalvik日志消息)
   * [ART日志消息](#ART日志消息)
@@ -271,7 +273,7 @@ adb shell dumpsys meminfo <package_name|pid> [-d]
 私有(干净和脏)`RAM`
 
     这是仅由您的进程使用的内存.这是您的应用进程被破坏时系统可以回收的`RAM`量.通常情况下,最重要的部分是私有脏`RAM`,他的
-    开销最大,    因为只有您的进程使用他,而且其内容仅存在于`RAM`中,所以无法被分页以进行存储(因为`Android`不适用交换).
+    开销最大,因为只有您的进程使用他,而且其内容仅存在于`RAM`中,所以无法被分页以进行存储(因为`Android`不适用交换).
     所有的`Dalvik`和您进行的原生堆分配都将是私有脏`RAM`;您与`Zygote`进程共享的`Dalvik`和原生分配是共享的脏`RAM`.
 
 按比例分配占用内存(PSS)
